@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+
+
+.Grid{
+  display: flex;
+  flex-wrap: wrap;
+  width: 700px;
+}
+
+.Cell{
+  background-color: rgb(147, 155, 192);
+  margin-right: 1rem;
+  margin-bottom: 1rem ;
+  width: 175px;
+  height: 175px;
+}
+.Cell:focus{
+  outline: none;
+}
