@@ -19,7 +19,28 @@ function Grid() {
             }}/>
         );
     }
-
+    
+    function getwinner(state){
+        const winnerLine =[
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [0,4,8],
+            [6,4,2]
+        ];
+            winnerLine.forEach(element => {
+                const [a,b,c] = element;
+                if(state[a] === state[b] && state[a] === state[c] && state[a] != null){
+                    console.log(state[a]);
+                    return state[a];
+                }
+            })
+            return null;
+    }
+    console.log(getwinner(state));
     return (
         <div class="Grid">
             <div class="grid-row"> 
