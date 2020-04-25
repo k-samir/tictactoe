@@ -2,13 +2,19 @@ import React, { useState } from 'react'
 import Cell from './Cell';
 import State from './State'
 import Restart from './Restart';
+
 function Grid() {
+
+     {/* Groupe de Cells composant notre grille */}
     const [cells, setCells] = useState(Array(9).fill(null));
     const symbol = ['X','O'];
+     {/* Début du tour  */}
     const [tour, setTour] = useState(0);
     var winner = null;
     var egalite = false;
     var state ='C\'est le tour de '+symbol[tour%2] ;
+
+    {/* Méthode qui renvoie un State pour pouvoir savoir qui est le gagnant */}
     function getWinner(state){
         const winnerLine =[
             [0,1,2],
@@ -24,13 +30,19 @@ function Grid() {
                 const [a,b,c] = winnerLine[i];
                 if(state[a]=== state[b] && state[a]=== state[c] && state[a] !== null){
                     return state[a];
+                    
                 }
             }
             return null;
     }
+
+    {/*  Méthode de traitement de la cellule, l'ordinateur joue si c'est son tour ou passe le tour au joueur suivant */}
     function traitementCellule(i){
+        {/* Action au click  */}
         return (
+            
             <Cell value={cells[i]} onclick={()=>{
+                {/* Regarde s'il n'y a pas de gagnant */}
                 if(winner !==null || cells[i] != null){
                     return;
                 }
@@ -38,11 +50,13 @@ function Grid() {
                 nextSymbol[i]=symbol[tour%2];
                 setCells(nextSymbol);
                 setTour(tour+1);
+                {/* Ordinateur joue si le joueur a coché la case */}
                 if(document.getElementById('ordi').checked)
                     coupsAlea(cells,i);
             }}/>
             );
-        }
+    }
+
     function egalité(cells){
         for(var i=0;i<cells.length;i++){
             if(cells[i] == null){
@@ -52,6 +66,7 @@ function Grid() {
         return true;
     }
 
+    {/* effectue un coup aléatoire  */}
     function coupsAlea(cells,i){
         var jouer=false;
         while(!jouer && tour != 8){
@@ -66,35 +81,44 @@ function Grid() {
             }
         }
     }
+
+    {/* Renvoie un nombre aléatoire */}
     function getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
     }
 
+    {/* Recherche s'il y a un gagnant */}
     winner = getWinner(cells)
+    {/* Recherche s'il y a égalité */}
     egalite = egalité(cells);
+
+
     if(winner !== null ){
         state = winner + ' a gagné';
+        
     }
     if(egalite){
         state = "Egalité";
     }
+
+    {/* Affichae à l'utilisateur */}
     return (
     <div>
         <input type="checkbox" id="ordi"/>
         <label onClick={()=>{document.getElementById('ordi').checked = !document.getElementById('ordi').checked}}>Jouer contre un ordinateur</label>
-        <div class="Grid">
-            <div class="grid-row"> 
+        <div className="Grid">
+            <div className="grid-row"> 
                 {traitementCellule(0)}
                 {traitementCellule(1)}
                 {traitementCellule(2)}
             </div>
 
-            <div class="grid-row"> 
+            <div className="grid-row"> 
                 {traitementCellule(3)}
                 {traitementCellule(4)}
                 {traitementCellule(5)}
             </div>
-            <div class="grid-row"> 
+            <div className="grid-row"> 
                 {traitementCellule(6)}
                 {traitementCellule(7)}
                 {traitementCellule(8)}

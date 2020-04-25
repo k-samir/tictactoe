@@ -2,7 +2,7 @@ import React from 'react';
 
 function State({value}){
     return (
-        <label class="State"> 
+        <label className="State"> 
             {value}
         </label>
     );
