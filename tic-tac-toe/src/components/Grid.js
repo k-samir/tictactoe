@@ -8,10 +8,7 @@ function Grid() {
     function traitementCellule(i){
         return (
             <Cell value={cells[i]} onclick={()=>{
-                var nextSymbol = cells.slice();
-                nextSymbol[i] = Symbol[tour%2];
-                setCells(nextSymbol);
-                setTour(tour+1);
+                "/";
             }}/>
         );
     }
