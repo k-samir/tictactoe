@@ -1,26 +1,15 @@
 import React, { useState } from 'react'
 import Cell from './Cell';
-
+import State from './State'
+import Restart from './Restart';
 function Grid() {
-    const [state, setstate] = useState(Array(9).fill(null));
+    const [cells, setCells] = useState(Array(9).fill(null));
     const symbol = ['X','O'];
     const [tour, setTour] = useState(0);
-    const winner = false;
-    function traitementCellule(i){
-        return (
-            <Cell value={state[i]} onclick={()=>{
-                var nextSymbol = state.slice();
-                if(winner || nextSymbol[i] != null){
-                    return;
-                }
-                nextSymbol[i]=symbol[tour%2];
-                setstate(nextSymbol);
-                setTour(tour+1);
-            }}/>
-        );
-    }
-    
-    function getwinner(state){
+    var winner = null;
+    var egalite = false;
+    var state ='C\'est le tour de '+symbol[tour%2] ;
+    function getWinner(state){
         const winnerLine =[
             [0,1,2],
             [3,4,5],
@@ -31,17 +20,47 @@ function Grid() {
             [0,4,8],
             [6,4,2]
         ];
-            winnerLine.forEach(element => {
-                const [a,b,c] = element;
-                if(state[a] === state[b] && state[a] === state[c] && state[a] != null){
-                    console.log(state[a]);
+            for (let i = 0; i < winnerLine.length; i++) {
+                const [a,b,c] = winnerLine[i];
+                if(state[a]=== state[b] && state[a]=== state[c] && state[a] !== null){
                     return state[a];
                 }
-            })
+            }
             return null;
     }
-    console.log(getwinner(state));
+    function traitementCellule(i){
+        return (
+            <Cell value={cells[i]} onclick={()=>{
+                var nextSymbol = cells.slice();
+                if(winner !==null || nextSymbol[i] != null){
+                    return;
+                }
+                nextSymbol[i]=symbol[tour%2];
+                setCells(nextSymbol);
+                setTour(tour+1);
+            }}/>
+            );
+    }
+    function egalité(state){
+        console.log(state);
+       for(var i=0;i<state.length;i++){
+            if(state[i] == null){
+                return false;
+            }
+       }
+        return true;
+    }
+
+    winner = getWinner(cells)
+    egalite = egalité(cells);
+    if(winner !== null ){
+        state = winner + ' a gagné';
+    }
+    if(egalite){
+        state = "Egalité";
+    }
     return (
+    <div>
         <div class="Grid">
             <div class="grid-row"> 
                 {traitementCellule(0)}
@@ -60,6 +79,11 @@ function Grid() {
                 {traitementCellule(8)}
             </div>
         </div>
+        <State value={state}/>
+        <Restart onclick={()=>{setCells(Array(9).fill(null)); setTour(0);}}/>
+    </div>
     );
 }
+
+
 export default Grid;
