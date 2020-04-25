@@ -1,8 +1,7 @@
-import React from 'react'
-
-function Cell({id,value,onclick}){
+import React from  'react';
+function Cell({value,onclick}){
     return (
-        <button class="Cell">
+        <button className="Cell" onClick={onclick}>
             {value}
         </button>
     );
