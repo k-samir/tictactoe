@@ -1,22 +1,22 @@
 .Grid{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.Grid-row{
-  display: flex;
-  flex-direction: row;
-  height: 136px;
-}
-
-.Cell{
-  background-color: gray;
-  border: black 4px solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .Grid-row{
+    display: flex;
+    flex-direction: row;
+    height: 136px;
+  }
   
-  width: 136px;
-  height: 136px;
-}
-
-.Cell:focus {
-  outline: none;
-}
+  .Cell{
+    background-color: gray;
+    border: black 4px solid;
+    
+    width: 136px;
+    height: 136px;
+  }
+  
+  .Cell:focus {
+    outline: none;
+  }
