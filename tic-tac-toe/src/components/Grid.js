@@ -31,24 +31,43 @@ function Grid() {
     function traitementCellule(i){
         return (
             <Cell value={cells[i]} onclick={()=>{
-                var nextSymbol = cells.slice();
-                if(winner !==null || nextSymbol[i] != null){
+                if(winner !==null || cells[i] != null){
                     return;
                 }
+                var nextSymbol = cells.slice();
                 nextSymbol[i]=symbol[tour%2];
                 setCells(nextSymbol);
                 setTour(tour+1);
+                if(document.getElementById('ordi').checked)
+                    coupsAlea(cells,i);
             }}/>
             );
-    }
-    function egalité(state){
-        console.log(state);
-       for(var i=0;i<state.length;i++){
-            if(state[i] == null){
+        }
+    function egalité(cells){
+        for(var i=0;i<cells.length;i++){
+            if(cells[i] == null){
                 return false;
             }
-       }
+        }
         return true;
+    }
+
+    function coupsAlea(cells,i){
+        var jouer=false;
+        while(!jouer && tour != 8){
+            const rand = getRandomInt(9);
+            if(cells[rand] == null && rand !== i ){
+                var coupBot = cells.slice();
+                coupBot[rand]='O';
+                coupBot[i]='X';
+                setCells(coupBot);
+                setTour(tour+2);
+                jouer = true;
+            }
+        }
+    }
+    function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
     }
 
     winner = getWinner(cells)
@@ -61,6 +80,8 @@ function Grid() {
     }
     return (
     <div>
+        <input type="checkbox" id="ordi"/>
+        <label onClick={()=>{document.getElementById('ordi').checked = !document.getElementById('ordi').checked}}>Jouer contre un ordinateur</label>
         <div class="Grid">
             <div class="grid-row"> 
                 {traitementCellule(0)}
@@ -84,6 +105,4 @@ function Grid() {
     </div>
     );
 }
-
-
 export default Grid;
