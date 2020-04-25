@@ -2,13 +2,16 @@ import React, { useState } from 'react'
 import Cell from './Cell';
 
 function Grid() {
-    const [cells, setCells] = useState(Array(9).fill(null));
-    const Symbol = ['X','O'];
+    const [state, setstate] = useState(Array(9).fill(null));
+    const symbol = ['X','O'];
     const [tour, setTour] = useState(0);
     function traitementCellule(i){
         return (
-            <Cell value={cells[i]} onclick={()=>{
-                "/";
+            <Cell value={state[i]} onclick={()=>{
+                var nextSymbol = state.slice();
+                nextSymbol[i]=symbol[tour%2];
+                setstate(nextSymbol);
+                setTour(tour+1);
             }}/>
         );
     }
