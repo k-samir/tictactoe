@@ -3,6 +3,10 @@ import Cell from './Cell';
 import State from './State'
 import Restart from './Restart';
 
+var scoreX = 0;
+var scoreO = 0;
+var scoreBool = true;
+
 function Grid() {
 
      {/* Groupe de Cells composant notre grille */}
@@ -13,6 +17,7 @@ function Grid() {
     var winner = null;
     var egalite = false;
     var state ='C\'est le tour de '+symbol[tour%2] ;
+    
 
     {/* Méthode qui renvoie un State pour pouvoir savoir qui est le gagnant */}
     function getWinner(state){
@@ -29,6 +34,7 @@ function Grid() {
             for (let i = 0; i < winnerLine.length; i++) {
                 const [a,b,c] = winnerLine[i];
                 if(state[a]=== state[b] && state[a]=== state[c] && state[a] !== null){
+                    
                     return state[a];
                     
                 }
@@ -96,11 +102,22 @@ function Grid() {
     if(winner !== null ){
         state = winner + ' a gagné';
         
+        
     }
     if(egalite){
         state = "Egalité";
     }
 
+    if(state == 'X a gagné' && scoreBool){
+        scoreX++;
+        scoreBool = false;
+    }
+    else if(state == 'O a gagné' && scoreBool){
+        scoreO++;
+        scoreBool = false;
+    }
+
+   
     {/* Affichae à l'utilisateur */}
     return (
     <div>
@@ -124,8 +141,14 @@ function Grid() {
                 {traitementCellule(8)}
             </div>
         </div>
+        
         <State value={state}/>
-        <Restart onclick={()=>{setCells(Array(9).fill(null)); setTour(0);}}/>
+        
+        <State value={"Score X : " + scoreX}/>
+
+        <State value={"Score O : " + scoreO}/>
+
+        <Restart onclick={()=>{setCells(Array(9).fill(null)); setTour(0);scoreBool = true;}}/>
     </div>
     );
 }
