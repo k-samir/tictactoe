@@ -8,8 +8,9 @@ function Grid() {
     const [tour, setTour] = useState(0);
     var winner = null;
     var egalite = false;
-    var state ='C\'est le tour de '+symbol[tour%2] ;
+    var state ='C\'est le tour de '+symbol[tour%2];
     function getWinner(state){
+        var res = null;
         const winnerLine =[
             [0,1,2],
             [3,4,5],
@@ -20,13 +21,14 @@ function Grid() {
             [0,4,8],
             [6,4,2]
         ];
-            for (let i = 0; i < winnerLine.length; i++) {
-                const [a,b,c] = winnerLine[i];
-                if(state[a]=== state[b] && state[a]=== state[c] && state[a] !== null){
-                    return state[a];
-                }
+        for (let i = 0; i < winnerLine.length; i++) {
+            const [a,b,c] = winnerLine[i];
+            if(state[a]=== state[b] && state[a]=== state[c] && state[a] !== null){
+                res = state[a];
+                console.log(state,i);
             }
-            return null;
+        }
+        return res;
     }
     function traitementCellule(i){
         return (
@@ -70,13 +72,13 @@ function Grid() {
             return Math.floor(Math.random() * Math.floor(max));
     }
 
-    winner = getWinner(cells)
+    winner = getWinner(cells);
     egalite = egalité(cells);
-    if(winner !== null ){
-        state = winner + ' a gagné';
-    }
     if(egalite){
         state = "Egalité";
+    }
+    if(winner !== null ){
+        state = winner + ' a gagné';
     }
     return (
     <div>
