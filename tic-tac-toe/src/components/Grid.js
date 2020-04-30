@@ -16,11 +16,9 @@ function Grid() {
     const [tour, setTour] = useState(0);
     var winner = null;
     var egalite = false;
-    var state ='C\'est le tour de '+symbol[tour%2] ;
-    
-
-    {/* Méthode qui renvoie un State pour pouvoir savoir qui est le gagnant */}
+    var state ='C\'est le tour de '+symbol[tour%2];
     function getWinner(state){
+        var res = null;
         const winnerLine =[
             [0,1,2],
             [3,4,5],
@@ -39,7 +37,8 @@ function Grid() {
                     
                 }
             }
-            return null;
+        }
+        return res;
     }
 
     {/*  Méthode de traitement de la cellule, l'ordinateur joue si c'est son tour ou passe le tour au joueur suivant */}
