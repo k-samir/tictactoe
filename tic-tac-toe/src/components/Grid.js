@@ -32,12 +32,9 @@ function Grid() {
             for (let i = 0; i < winnerLine.length; i++) {
                 const [a,b,c] = winnerLine[i];
                 if(state[a]=== state[b] && state[a]=== state[c] && state[a] !== null){
-                    
                     return state[a];
-                    
                 }
             }
-        }
         return res;
     }
 
@@ -107,11 +104,11 @@ function Grid() {
         state = "Egalité";
     }
 
-    if(state == 'X a gagné' && scoreBool){
+    if(state === 'X a gagné' && scoreBool){
         scoreX++;
         scoreBool = false;
     }
-    else if(state == 'O a gagné' && scoreBool){
+    else if(state === 'O a gagné' && scoreBool){
         scoreO++;
         scoreBool = false;
     }
