@@ -2,9 +2,10 @@ import React from 'react';
 
 function State({value}){
     return (
-        <label class="State"> 
-            {value}
+        <label className="State"> 
+            {value}<br/>
         </label>
+        
     );
 }
 
