@@ -13,7 +13,7 @@ function Grid() {
     
     {/* Groupe de Cells composant notre grille */}
     const [cells, setCells] = useState(Array(9).fill(null));
-    const [checked, setChecked] = useState(false);
+    const [coche, setCoche] = useState(false);
     const symbol = ['X','O'];
     {/* Début du tour  */}
     const [tour, setTour] = useState(0);
@@ -58,7 +58,7 @@ function Grid() {
                 setTour(tour+1);
                 {/* Ordinateur joue si le joueur a coché la case */}
 
-                if(checked)
+                if(coche === true)
                     coupsAlea(cells,i);
             }}/>
             );
@@ -98,15 +98,15 @@ function Grid() {
     winner = getWinner(cells)
     {/* Recherche s'il y a égalité */}
     egalite = egalité(cells);
-
+    
+    if(egalite){
+        state = "Egalité";
+    }
 
     if(winner !== null ){
         state = winner + ' a gagné';
         
         
-    }
-    if(egalite){
-        state = "Egalité";
     }
 
     if(state === 'X a gagné' && scoreBool){
@@ -122,8 +122,8 @@ function Grid() {
     {/* Affichae à l'utilisateur */}
     return (
     <div>
-        <input type="checkbox" id="ordi" checked={checked}/>
-        <label onClick={()=>{setChecked(!checked)}}>Jouer contre un ordinateur</label>
+        <input type="checkbox" id="ordi" checked={coche} onClick={()=>{setCoche(!coche)}}/>
+        <label onClick={()=>{setCoche(!coche)}}>Jouer contre un ordinateur</label>
         <div className="Grid">
             <div className="grid-row"> 
                 {traitementCellule(0)}

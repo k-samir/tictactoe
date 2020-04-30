@@ -7,9 +7,9 @@ import Cell from './components/Cell'
 Enzyme.configure({ adapter : new Adapter() });
 describe('Grid',()=>{
     it('test changement de symbole',() => {
-        const wrapper = mount(<Grid/>,{ attachTo: document.getElementById('ordi') }); 
+        const wrapper = mount(<Grid/>); 
         const cell = wrapper.find('#cell0');
-        cell.simulate('click');
+        cell.props().onClick();
         expect(cell.text()).toBe('X');
         const cell2 = wrapper.find('#cell1');
         cell2.simulate('click');
