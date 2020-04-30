@@ -1,7 +1,7 @@
 import React from  'react';
-function Cell({value,onclick}){
+function Cell({value,i,onclick}){
     return (
-        <button className="Cell" onClick={onclick}>
+        <button className="Cell" id={"cell" +i} onClick={onclick} value={value}>
             {value}
         </button>
     );

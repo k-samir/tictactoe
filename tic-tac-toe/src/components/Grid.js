@@ -3,17 +3,21 @@ import Cell from './Cell';
 import State from './State'
 import Restart from './Restart';
 
+{/*score du joueur x*/ }
 var scoreX = 0;
+{/**score du joueur o */}
 var scoreO = 0;
 var scoreBool = true;
 
 function Grid() {
-
-     {/* Groupe de Cells composant notre grille */}
+    
+    {/* Groupe de Cells composant notre grille */}
     const [cells, setCells] = useState(Array(9).fill(null));
+    const [checked, setChecked] = useState(false);
     const symbol = ['X','O'];
-     {/* Début du tour  */}
+    {/* Début du tour  */}
     const [tour, setTour] = useState(0);
+
     var winner = null;
     var egalite = false;
     var state ='C\'est le tour de '+symbol[tour%2];
@@ -43,7 +47,7 @@ function Grid() {
         {/* Action au click  */}
         return (
             
-            <Cell value={cells[i]} onclick={()=>{
+            <Cell value={cells[i]} i={i} onclick={()=>{
                 {/* Regarde s'il n'y a pas de gagnant */}
                 if(winner !==null || cells[i] != null){
                     return;
@@ -53,7 +57,8 @@ function Grid() {
                 setCells(nextSymbol);
                 setTour(tour+1);
                 {/* Ordinateur joue si le joueur a coché la case */}
-                if(document.getElementById('ordi').checked)
+
+                if(checked)
                     coupsAlea(cells,i);
             }}/>
             );
@@ -84,7 +89,7 @@ function Grid() {
         }
     }
 
-    {/* Renvoie un nombre aléatoire */}
+    {/* Renvoie un nombre aléatoire entre 0 et max */}
     function getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
     }
@@ -117,8 +122,8 @@ function Grid() {
     {/* Affichae à l'utilisateur */}
     return (
     <div>
-        <input type="checkbox" id="ordi"/>
-        <label onClick={()=>{document.getElementById('ordi').checked = !document.getElementById('ordi').checked}}>Jouer contre un ordinateur</label>
+        <input type="checkbox" id="ordi" checked={checked}/>
+        <label onClick={()=>{setChecked(!checked)}}>Jouer contre un ordinateur</label>
         <div className="Grid">
             <div className="grid-row"> 
                 {traitementCellule(0)}
@@ -137,13 +142,7 @@ function Grid() {
                 {traitementCellule(8)}
             </div>
         </div>
-        
-        <State value={state}/>
-        
-        <State value={"Score X : " + scoreX}/>
-
-        <State value={"Score O : " + scoreO}/>
-
+        <State value={state} scoreX={scoreX} scoreO={scoreO}/>
         <Restart onclick={()=>{setCells(Array(9).fill(null)); setTour(0);scoreBool = true;}}/>
     </div>
     );

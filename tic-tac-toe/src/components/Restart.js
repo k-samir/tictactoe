@@ -4,7 +4,7 @@ function Restart({cells, onclick}){
     return (
         <div>
             <br/>
-            <button onClick={onclick}>
+            <button id="restart" onClick={onclick}>
                 Recommencer une partie
             </button>
 
