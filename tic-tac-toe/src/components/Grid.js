@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Cell from './Cell';
 import State from './State'
 import Restart from './Restart';
-
+import io from 'socket.io-client';
 {/*score du joueur x*/ }
 var scoreX = 0;
 {/**score du joueur o */}
@@ -11,6 +11,10 @@ var scoreBool = true;
 
 function Grid() {
     
+    const socket = io("http://localhost:3000", {
+        transports: ["websocket", "polling"]
+    });
+
     {/* Groupe de Cells composant notre grille */}
     const [cells, setCells] = useState(Array(9).fill(null));
     const [coche, setCoche] = useState(false);
@@ -55,44 +59,58 @@ function Grid() {
                 var nextSymbol = cells.slice();
                 nextSymbol[i]=symbol[tour%2];
                 setCells(nextSymbol);
-                setTour(tour+1);
+                console.log(cells);
+                socket.emit("coup",nextSymbol);
+                setTour(tour+1)
                 {/* Ordinateur joue si le joueur a coché la case */}
-
+                
                 if(coche === true)
-                    coupsAlea(cells,i);
+                coupsAlea(cells,i);
+                
             }}/>
             );
-    }
-
-    function egalité(cells){
-        for(var i=0;i<cells.length;i++){
-            if(cells[i] == null){
-                return false;
+        }
+        
+        function egalité(cells){
+            for(var i=0;i<cells.length;i++){
+                if(cells[i] == null){
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        {/* effectue un coup aléatoire  */}
+        function coupsAlea(cells,i){
+            var jouer=false;
+            while(!jouer && tour != 8){
+                const rand = getRandomInt(9);
+                if(cells[rand] == null && rand !== i ){
+                    var coupBot = cells.slice();
+                    coupBot[rand]='O';
+                    coupBot[i]='X';
+                    setCells(coupBot);
+                    setTour(tour+2);
+                    jouer = true;
+                }
             }
         }
-        return true;
-    }
-
-    {/* effectue un coup aléatoire  */}
-    function coupsAlea(cells,i){
-        var jouer=false;
-        while(!jouer && tour != 8){
-            const rand = getRandomInt(9);
-            if(cells[rand] == null && rand !== i ){
-                var coupBot = cells.slice();
-                coupBot[rand]='O';
-                coupBot[i]='X';
-                setCells(coupBot);
-                setTour(tour+2);
-                jouer = true;
-            }
-        }
-    }
-
-    {/* Renvoie un nombre aléatoire entre 0 et max */}
-    function getRandomInt(max) {
+        
+        {/* Renvoie un nombre aléatoire entre 0 et max */}
+        function getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
-    }
+        }
+        
+        
+        
+        useEffect(()=>{
+            
+            socket.on("test", (cellule) => {
+                setCells(cellule);
+                setTour(tour+1);
+            });
+        });
+
 
     {/* Recherche s'il y a un gagnant */}
     winner = getWinner(cells)
@@ -105,8 +123,6 @@ function Grid() {
 
     if(winner !== null ){
         state = winner + ' a gagné';
-        
-        
     }
 
     if(state === 'X a gagné' && scoreBool){
@@ -122,8 +138,8 @@ function Grid() {
     {/* Affichae à l'utilisateur */}
     return (
     <div>
-        <input type="checkbox" id="ordi" checked={coche} onClick={()=>{setCoche(!coche)}}/>
-        <label onClick={()=>{setCoche(!coche)}}>Jouer contre un ordinateur</label>
+        {/*<input type="checkbox" id="ordi" checked={coche} onClick={()=>{setCoche(!coche)}}/>
+        <label onClick={()=>{setCoche(!coche)}}>Jouer contre un ordinateur</label>*/}
         <div className="Grid">
             <div className="grid-row"> 
                 {traitementCellule(0)}
@@ -143,7 +159,11 @@ function Grid() {
             </div>
         </div>
         <State value={state} scoreX={scoreX} scoreO={scoreO}/>
-        <Restart onclick={()=>{setCells(Array(9).fill(null)); setTour(0);scoreBool = true;}}/>
+        <Restart onclick={()=>{
+            setCells(Array(9).fill(null)); 
+            setTour(0); 
+            scoreBool = true;
+            }}/>
     </div>
     );
 }

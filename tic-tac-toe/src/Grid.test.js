@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Enzyme, {create, shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Grid from './components/Grid';
