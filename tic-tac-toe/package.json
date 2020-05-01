@@ -15,7 +15,7 @@
     "socket.io-client": "^2.3.0"
   },
   "scripts": {
-    "start": "npm run start:client",
+    "start": "npm run start:client start:server",
     "start:client": "parcel src/index.html",
     "start:server": "node src/server.js",
     "build": "react-scripts build",

@@ -8,9 +8,12 @@ io.on('connection', (socket) => {
   
   socket.on("coup", cellule => {
     console.log("coups");
-    io.emit("test",cellule);
+    io.emit("coups",cellule);
   });
-  
+  socket.on('restart',cellule => {
+    console.log("restart");
+    io.emit("restartGame",cellule);
+  })
 });
 
 server.listen(3000,'127.0.0.1',() =>

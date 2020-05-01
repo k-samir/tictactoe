@@ -101,11 +101,9 @@ function Grid() {
             return Math.floor(Math.random() * Math.floor(max));
         }
         
-        
-        
         useEffect(()=>{
-            
-            socket.on("test", (cellule) => {
+
+            socket.on("coups", (cellule) => {
                 setCells(cellule);
                 setTour(tour+1);
             });
@@ -160,9 +158,7 @@ function Grid() {
         </div>
         <State value={state} scoreX={scoreX} scoreO={scoreO}/>
         <Restart onclick={()=>{
-            setCells(Array(9).fill(null)); 
-            setTour(0); 
-            scoreBool = true;
+            socket.emit('restart',cells)
             }}/>
     </div>
     );
