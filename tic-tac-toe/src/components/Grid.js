@@ -11,9 +11,7 @@ var scoreBool = true;
 
 function Grid() {
     
-    const socket = io("http://localhost:3000", {
-        transports: ["websocket", "polling"]
-    });
+    const socket = io("http://localhost:3000");
 
     {/* Groupe de Cells composant notre grille */}
     const [cells, setCells] = useState(Array(9).fill(null));
@@ -59,9 +57,7 @@ function Grid() {
                 var nextSymbol = cells.slice();
                 nextSymbol[i]=symbol[tour%2];
                 setCells(nextSymbol);
-                console.log(cells);
-                socket.emit("coup",nextSymbol);
-                setTour(tour+1)
+                socket.emit("coup",nextSymbol,tour+1);
                 {/* Ordinateur joue si le joueur a coché la case */}
                 
                 if(coche === true)
@@ -102,42 +98,49 @@ function Grid() {
         }
         
         useEffect(()=>{
-
-            socket.on("coups", (cellule) => {
+            socket.on("coups", (cellule,coupsJouer) => {
+                console.log("coups "+coupsJouer);
                 setCells(cellule);
-                setTour(tour+1);
+                setTour(coupsJouer);
             });
-        });
 
+            socket.on("restartGame",cellule=>{
+                console.log("restart");
+                setCells(Array(9).fill(null));
+                setTour(0);
+            })
+        },[]);
 
-    {/* Recherche s'il y a un gagnant */}
-    winner = getWinner(cells)
-    {/* Recherche s'il y a égalité */}
-    egalite = egalité(cells);
+        {/* Recherche s'il y a un gagnant */}
+        winner = getWinner(cells);
+                
+        {/* Recherche s'il y a égalité */}
+        egalite = egalité(cells);
+        
+        if(egalite){
+            state = "Egalité";
+        }
+
+        if(winner !== null ){
+            state = winner + ' a gagné';
+        }
+
+        if(state === 'X a gagné' && scoreBool){
+            scoreX++;
+            scoreBool = false;
+        }
+        else if(state === 'O a gagné' && scoreBool){
+            scoreO++;
+            scoreBool = false;
+        }
     
-    if(egalite){
-        state = "Egalité";
-    }
-
-    if(winner !== null ){
-        state = winner + ' a gagné';
-    }
-
-    if(state === 'X a gagné' && scoreBool){
-        scoreX++;
-        scoreBool = false;
-    }
-    else if(state === 'O a gagné' && scoreBool){
-        scoreO++;
-        scoreBool = false;
-    }
 
    
     {/* Affichae à l'utilisateur */}
     return (
     <div>
-        {/*<input type="checkbox" id="ordi" checked={coche} onClick={()=>{setCoche(!coche)}}/>
-        <label onClick={()=>{setCoche(!coche)}}>Jouer contre un ordinateur</label>*/}
+        <input type="checkbox" id="ordi" checked={coche} onClick={()=>{setCoche(!coche)}}/>
+        <label onClick={()=>{setCoche(!coche)}}>Jouer contre un ordinateur</label>
         <div className="Grid">
             <div className="grid-row"> 
                 {traitementCellule(0)}
@@ -158,7 +161,7 @@ function Grid() {
         </div>
         <State value={state} scoreX={scoreX} scoreO={scoreO}/>
         <Restart onclick={()=>{
-            socket.emit('restart',cells)
+            socket.emit("restart",cells);
             }}/>
     </div>
     );
