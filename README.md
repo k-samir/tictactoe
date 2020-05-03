@@ -1,2 +1,2 @@
-npm install -g parcel-bundler --save
+npm install -g parcel-bundler --save <br>
 npm install --save
