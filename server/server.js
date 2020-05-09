@@ -2,7 +2,7 @@
 const server = require("http").createServer(),
   io = require("socket.io")(server),
   ip = process.env.ip || '127.0.0.1',
-  port = process.env.port || 3000;
+  port = process.env.port || 8080;
 
 io.on('connection', (socket) => {
 

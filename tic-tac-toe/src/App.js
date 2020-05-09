@@ -4,7 +4,10 @@ import './App.css';
 
 function App() {
   return (
-    <Grid/>
+    <div>
+      <p>Fait pas Yoann STEPHANUS et Samir KAMAR</p>
+      <Grid/>
+    </div>
   );
 }
 

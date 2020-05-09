@@ -3,21 +3,21 @@ import Cell from './Cell';
 import State from './State'
 import Restart from './Restart';
 import io from 'socket.io-client';
-{/*score du joueur x*/ }
+/*score du joueur x*/
 var scoreX = 0;
-{/**score du joueur o */}
+/*score du joueur o */
 var scoreO = 0;
 var scoreBool = true;
 
 function Grid() {
     
-    const socket = io("http://localhost:3000");
+    const socket = io("http://localhost:8080");
 
-    {/* Groupe de Cells composant notre grille */}
+    /* Groupe de Cells composant notre grille */
     const [cells, setCells] = useState(Array(9).fill(null));
     const [coche, setCoche] = useState(false);
     const symbol = ['X','O'];
-    {/* Début du tour  */}
+    /* Début du tour  */
     const [tour, setTour] = useState(0);
 
     var winner = null;
@@ -44,13 +44,13 @@ function Grid() {
         return res;
     }
 
-    {/*  Méthode de traitement de la cellule, l'ordinateur joue si c'est son tour ou passe le tour au joueur suivant */}
+    /*  Méthode de traitement de la cellule, l'ordinateur joue si c'est son tour ou passe le tour au joueur suivant */
     function traitementCellule(i){
-        {/* Action au click  */}
+        /* Action au click  */
         return (
             
             <Cell value={cells[i]} i={i} onclick={()=>{
-                {/* Regarde s'il n'y a pas de gagnant */}
+                /* Regarde s'il n'y a pas de gagnant */
                 if(winner !==null || cells[i] != null){
                     return;
                 }
@@ -58,7 +58,7 @@ function Grid() {
                 nextSymbol[i]=symbol[tour%2];
                 setCells(nextSymbol);
                 socket.emit("coup",nextSymbol,tour+1);
-                {/* Ordinateur joue si le joueur a coché la case */}
+                /* Ordinateur joue si le joueur a coché la case */
                 
                 if(coche === true)
                 coupsAlea(cells,i);
@@ -76,10 +76,10 @@ function Grid() {
             return true;
         }
         
-        {/* effectue un coup aléatoire  */}
+        /* effectue un coup aléatoire  */
         function coupsAlea(cells,i){
             var jouer=false;
-            while(!jouer && tour != 8){
+            while(!jouer && tour < 8){
                 const rand = getRandomInt(9);
                 if(cells[rand] == null && rand !== i ){
                     var coupBot = cells.slice();
@@ -92,7 +92,7 @@ function Grid() {
             }
         }
         
-        {/* Renvoie un nombre aléatoire entre 0 et max */}
+        /* Renvoie un nombre aléatoire entre 0 et max */
         function getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
         }
@@ -109,12 +109,12 @@ function Grid() {
                 setCells(Array(9).fill(null));
                 setTour(0);
             })
-        },[]);
+        });
 
-        {/* Recherche s'il y a un gagnant */}
+        /* Recherche s'il y a un gagnant */
         winner = getWinner(cells);
                 
-        {/* Recherche s'il y a égalité */}
+        /* Recherche s'il y a égalité */
         egalite = egalité(cells);
         
         if(egalite){
@@ -136,7 +136,7 @@ function Grid() {
     
 
    
-    {/* Affichae à l'utilisateur */}
+    /* Affichae à l'utilisateur */
     return (
     <div>
         <input type="checkbox" id="ordi" checked={coche} onClick={()=>{setCoche(!coche)}}/>
